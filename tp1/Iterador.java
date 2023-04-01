@@ -21,5 +21,6 @@ public class Iterador  implements Iterator {
 		this.iterador = this.iterador.getNext();
 		return toReturn;
 	}
+	
 
 }

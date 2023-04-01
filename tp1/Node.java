@@ -31,6 +31,15 @@ public class Node<T> {
 	public void setInfo(T info) {
 		this.info = info;
 	}
+	
+	@Override  
+	public String toString(){
+		String s = " ";
+		s += this.getInfo();
+		return s;
+		
+	}
+	
 	}
 
 

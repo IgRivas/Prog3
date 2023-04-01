@@ -23,8 +23,19 @@ public class Pile<T> {
 	
 	public void reverse(){
 		MySimpleLinkedList<T> aux = new MySimpleLinkedList<T>();
-		while(aux.size()< this.lista.size()	){
+		int cursor = this.lista.size();
+		while(aux.size()< cursor){
 			aux.insertFront(this.lista.extractFront());
+		
 		}
+		this.lista = aux;
+		
+	}
+	public int indexOf(T elemento){
+		return this.lista.indexOf(elemento);
+	}
+	@Override 
+	public String toString(){
+		return this.lista.toString();
 	}
 }

@@ -58,7 +58,7 @@ public class MySimpleLinkedList<T>  implements Iterable<T>{
 	public String toString() {
 		if(!isEmpty()){
 			Node<T> temp =this.first;
-			String result = this.first.toString();
+			String result = "";
 			while(temp!=null){
 				result+= temp.toString();
 				temp = temp.getNext();
@@ -89,4 +89,13 @@ public class MySimpleLinkedList<T>  implements Iterable<T>{
 			Iterador i = new Iterador(this.first); 
 			return i;
 		}
+	    
+	    public MySimpleLinkedList<T> listaDeComunes(MySimpleLinkedList<T> lista1, MySimpleLinkedList<T> lista2){
+				//Ordenar las listas antes de comparar sus elementos?
+	    		
+	    	return lista2;
+	    	
+	    }
+	 
+	    
 	 }
