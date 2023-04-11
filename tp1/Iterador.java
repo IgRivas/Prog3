@@ -2,11 +2,11 @@ package tp1;
 
 import java.util.Iterator;
 
-public class Iterador  implements Iterator {
+public class Iterador<T>  implements Iterator<T> {
 	
-	private Node iterador;
+	private Node<T> iterador;
 	
-	public Iterador(Node n){
+	public Iterador(Node<T> n){
 		this.iterador= n;
 	}
 	@Override
@@ -16,10 +16,14 @@ public class Iterador  implements Iterator {
 	}
 
 	@Override
-	public Object next() { // Retorno el nodo en el que estoy y paso al siguiente
-		Node toReturn = this.iterador;
+	public T next() {
+		T toReturn = this.iterador.getInfo();
 		this.iterador = this.iterador.getNext();
 		return toReturn;
+	}
+	
+	public T getElemento() {
+		return this.iterador.getInfo();
 	}
 	
 

@@ -8,6 +8,7 @@ public class Pile<T> {
 		
 	}
 	
+	
 	public void push(T info){
 		this.lista.insertFront(info);
 		
@@ -38,4 +39,6 @@ public class Pile<T> {
 	public String toString(){
 		return this.lista.toString();
 	}
+	
+	
 }

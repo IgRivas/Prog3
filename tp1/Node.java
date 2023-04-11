@@ -5,6 +5,7 @@ public class Node<T> {
 	private T info;
 	private Node<T> next;
 
+
 	public Node() {
 		this.info = null;
 		this.next = null;
@@ -37,6 +38,11 @@ public class Node<T> {
 		String s = " ";
 		s += this.getInfo();
 		return s;
+		
+	}
+	@Override 
+	public boolean equals(Object info){
+		return info==this.getInfo();
 		
 	}
 	
