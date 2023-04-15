@@ -161,6 +161,27 @@ public class MySimpleLinkedList<T>  implements Iterable<T>{
 	            aux.setNext(entrada);
 	        }
 	    }
-
+	    //Escriba una función que dadas dos listas construya otra con los elementos que estan en la primera pero no en la se
+	    
+	    public MySimpleLinkedList<T> listaNoComunes(MySimpleLinkedList<T> lista1, MySimpleLinkedList<T> lista2){
+			MySimpleLinkedList<T> aux =  new MySimpleLinkedList<T>();
+			if(!lista1.isEmpty()&& !lista2.isEmpty()){
+				for(T i1 : lista1){
+					if(!lista2.contiene(i1)){
+						aux.insertFront(i1);
+					}
+				}
+	    }
+		return aux;
+	   }
+	    //Implementacion para saber si un elemento es contenido por una lista
+		private boolean contiene(T i1) {
+			for(T i : this){
+				if(i.equals(i1)){
+					return true;
+				}
+			}
+			return false;
+		}
 
 }

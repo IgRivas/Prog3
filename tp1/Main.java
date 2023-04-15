@@ -11,12 +11,13 @@ public class Main {
 		p1.push(40);
 		
 
-		System.out.println(p1);
+
 		
 		p1.reverse();
 		
-		
-		System.out.println(p1.indexOf(1));
+		MetodosRecursivos c = new MetodosRecursivos();
+		String a = "hola";
+		System.out.println(a.substring(0));
 	}
 
 }
