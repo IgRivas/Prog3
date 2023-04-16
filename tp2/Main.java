@@ -10,10 +10,10 @@ t1.add(3);
 t1.add(2);
 t1.add(4);
 t1.add(7);
-t1.add(1);
-t1.add(17);
 t1.add(13);
 t1.add(9);
+t1.add(18);
+t1.add(17);
 t1.add(20);
 
 //System.out.println("PreOrder");
@@ -26,7 +26,7 @@ System.out.println("InOrder");
 t1.imprimirInOrder();
 
 System.out.println(t1.getLongestBranch());
-System.out.println(t1.getElemAtLevel(3,0));
+System.out.println(t1.getElemGreaterThan(t1, 2));
 }
 
 }

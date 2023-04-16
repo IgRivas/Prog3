@@ -205,4 +205,38 @@ public class Tree {
 		return levelList;
 	}
 	
+	//Metodo para sumar todos los elementos de un arbol
+	public Integer getSuma(Tree t){
+		Integer suma = 0;
+		if(this.left != null){
+			suma+=(this.left.getSuma(t));
+		}
+		if(this.right!= null){
+			suma+=(this.right.getSuma(t));
+		}
+		suma += this.value;
+		
+		return suma;
+		
+	}
+	//Metodo que nos retorna una lista con el valor de los elementos "hoja"
+	// que son mayores al valor que nos llega por parametro.
+	public ArrayList<Integer> getElemGreaterThan(Tree t, int i){
+		ArrayList<Integer> result = new ArrayList<>();
+		
+		if(this.left != null){
+			result.addAll(this.left.getElemGreaterThan(t, i));
+			
+		}
+		if(this.right != null){
+			result.addAll(this.right.getElemGreaterThan(t, i));
+			
+		}// Debe ser hoja para incluirse a la lista
+		if(this.left == null && this.right == null && this.value > i){
+			result.add(this.value);
+		}
+		return result;
+		
+		
+	}
 }
