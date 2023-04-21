@@ -18,7 +18,7 @@ t1.add(7);
 
 System.out.println("PreOrder");
 t1.imprimirPreOrden();
-
+System.out.println("borrado");
 t1.delete(2, null);
 t1.imprimirPreOrden();
 //

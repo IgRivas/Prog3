@@ -253,15 +253,18 @@ public class Tree {
 			if(toDelete > this.value){
 				if(this.right!= null){
 					this.right.delete(toDelete, this);
+				}else {
+					return false;
 				}
-			}
-			if(toDelete < this.value){
+			}else if(toDelete < this.value){
 				if(this.left!= null){
 					this.left.delete(toDelete,this);
+				}else{
+					return false;
 				}
 			}
-				//Si encontramos el valor...
-			if(this.value == toDelete){
+			//Si encontramos el valor...
+			else{
 			//Caso 1
 				if(this.right == null && this.left == null){
 					this.value = null;
@@ -270,38 +273,56 @@ public class Tree {
 				//Caso 2
 				//Aca vamos a necesitar al padre
 				//Si tiene solo el hijo izq
-				if(this.left!= null && this.right== null){
-					//Como se en que rama del padre esta? Si valor padre es menor, el elemento a borrar esta a la derecha del padre
-					if(father.value < this.value){
-						father.right = this.left;
-						this.value = null;
-						return true;
-					}else{
+				else if(this.left!= null && this.right== null){
+//					Debo saber en que ramam padre estoy
+						if(father == null){ //En el caso de que quiera borrar la raiz, esta bien usar right.left??
+							this.value = this.left.value;
+							this.right = this.left.right;
+							this.left = this.left.left;
+						}else if(father.value < this.value){
+							father.right = this.left;
+							this.value = null;
+							return true;
+						}else{
 						//Si valor padre es mayor, el elemento a borrar esta a la izq del padre
-						father.left = this.left;
-						this.value = null;
-						return true;
+							father.left = this.left;
+							this.value = null;
+							return true;
 					}
 				}
-				//Si tiene solo el hijo der
-				if(this.right!= null && this.left== null){
-					//Como se en que rama del padre esta? Si valor padre es menor, el elemento a borrar esta a la derecha del padre
-					if(father.value < this.value){
-						father.right= this.right;
-						this.value = null;
-						return true;
-					}
-					else{ //Si valor padre es mayor, el elemento a borrar esta a la izq del padre
-						father.left = this.left;
-						this.value = null;
-						return true;
-					}	
-				}
-				//Caso 3 tiene dos hijos
-				if(this.right != null && this.left !=null){
-					
+//				Si tiene solo el hijo der
+				else if(this.right!= null && this.left== null){
+//				 Si valor padre es menor, el elemento a borrar esta a la derecha del padre
+						if(father == null){
+							this.value = this.right.value;
+							this.left = this.right.left;
+							this.right = this.right.right;
+						}else if(father.value < this.value){
+							father.right= this.right;
+							this.value = null;
+							return true;
+						}else{ //Si valor padre es mayor, el elemento a borrar esta a la izq del padre
+							father.left = this.left;
+							this.value = null;
+							return true;
+						}	
+				}//Caso 3 tiene dos hijos
+				else{ 
+					Tree aux = this.right.getNMI();
+					this.value = aux.value;
+					this.right.delete(aux.value, this);
+					return true;
 				}
 			}
-			return false;
+			return true;
+		}
+
+		
+//		Este metodo deberia retornar una copia? o con que sea privado basta para que no rompa encapsulamiento?
+		public Tree getNMI(){
+			Tree toReturn = this;
+			if(toReturn.left != null){
+				return toReturn.left.getNMI();
+			} else return toReturn;
 		}
 }
