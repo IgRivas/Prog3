@@ -142,7 +142,7 @@ public class Tree {
 			listLeft.add(this.value);
 			listLeft.addAll(this.left.getLongestBranch());
 		}
-		//Lo mismo que en la rama izq
+		//Lo mismo que en la rama der
 		if(this.right !=null){
 				listRight.add(this.value);
 				listRight.addAll(this.right.getLongestBranch());
@@ -325,4 +325,23 @@ public class Tree {
 				return toReturn.left.getNMI();
 			} else return toReturn;
 		}
+		
+//		Ejercicio 4( Para arboles no binarios, con valores vacios)
+		public void setValues(){
+			if(this.isEmpty()){
+				if(this.left.isEmpty()){
+					this.left.value = 0 ;
+				}
+				if(this.right.isEmpty()){
+					this.right.value = 0;
+				}
+				this.value = (this.right.value - this.left.value);
+			}
+			this.left.setValues();
+			this.right.setValues();
+		}
+
+		
 }
+
+
