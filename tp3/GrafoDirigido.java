@@ -1,24 +1,31 @@
 package tp3;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class GrafoDirigido<T> implements Grafo<T> {
 	//Cada clave integer hace referencia a un vertice con valor de tipo NodoGrafo.
-	//Creo que no es necesario guardar los arcos en el Grafo, si los tenemos en la lista de adyacencia de los vertices.
+	//
 	private HashMap<Integer, NodoGrafo> vertices;
+	private ArrayList<Arco<T>> arcos;
+	
 	
 	public GrafoDirigido(){
 	this.vertices = new HashMap<>();
+	this.arcos = new ArrayList<>();
+	
 	}
 	//EL verticeId es la clave del HashMap, En este caso creamos el vertice con indice, pero sin valor. 
 	//Consultar si podemos cambiar la asignatura del metodo para que reciba el valor del vertice.
 	public void agregarVertice(int verticeId) {
 		//Chequea si la clave existe en el map
 		if(!vertices.containsKey(verticeId)){
-			vertices.put(verticeId,new NodoGrafo());
+			vertices.put(verticeId,new NodoGrafo(verticeId));
+			System.out.println("ingresado");
 		}else 
-			System.out.println("El vertice ya existe");
+			System.out.println("El verticeID "+verticeId+ " ya existe");
 		
 
 	}
@@ -33,20 +40,27 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	}
 
 	@Override
-	//Instancio un arco con los vertices y lo agrego a la lista de adyacencia del vertice
+	//
 	public void agregarArco(int verticeId1, int verticeId2, T etiqueta) {
-		//vertices.get(verticeId1).addArco(verticeId1,verticeId2,etiqueta;	Delegar al NodoGrafo la creacion del arco?
-		Arco<T> arco = new Arco<T>(verticeId1,verticeId2, etiqueta);
-		vertices.get(verticeId1).addArco(arco);
-		
+		Arco<T> nuevo = new Arco<>(verticeId1,verticeId2,etiqueta);
+		if(!arcos.contains(nuevo)){
+			arcos.add(nuevo);
+		}
 	}
 
 	@Override
 	public void borrarArco(int verticeId1, int verticeId2) {
-		NodoGrafo n1 = vertices.get(verticeId1);
-		n1.borrarArco(verticeId1,verticeId2);
-
+		Arco<T> aBorrar = null;
+	 	for(Arco<T> a : arcos){
+	 		if(a.getVerticeDestino()== verticeId2 && a.getVerticeOrigen()== verticeId1){
+	 			aBorrar = a;
+	 		}
+	 	}
+	 	if(aBorrar != null){
+	 		arcos.remove(aBorrar);
+	 	}
 	}
+	
 
 	@Override
 	public boolean contieneVertice(int verticeId) {
@@ -57,28 +71,35 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	}
 
 	@Override
-	public boolean existeArco(int verticeId1, int verticeId2) {
-		NodoGrafo n1 = vertices.get(verticeId1);
-		n1.existeArco(verticeId1,verticeId2);
-		return false;
+	public boolean existeArco(int origen, int destino) {
+		 for(Arco<T> a : arcos){
+	 		if(a.getVerticeDestino()== destino && a.getVerticeOrigen()== origen){
+	 			return true;
+	 		}
+	 	}
+	 	return false;
 	}
 
 	@Override
-	public Arco<T> obtenerArco(int verticeId1, int verticeId2) {
-		// TODO Auto-generated method stub
+	public Arco<T> obtenerArco(int origen ,int destino) {
+		Arco<T> aRetornar = null;
+		for(Arco<T> a: arcos){
+			if(a.getVerticeDestino()== destino && a.getVerticeOrigen()== origen){
+	 			aRetornar = a;
+	 			return aRetornar;
+	 			}
+		}
 		return null;
 	}
 
 	@Override
 	public int cantidadVertices() {
-		// TODO Auto-generated method stub
-		return 0;
+		return vertices.size();
 	}
 
 	@Override
 	public int cantidadArcos() {
-		// TODO Auto-generated method stub
-		return 0;
+		return arcos.size();
 	}
 
 	@Override
@@ -89,7 +110,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 
 	@Override
 	public Iterator<Integer> obtenerAdyacentes(int verticeId) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

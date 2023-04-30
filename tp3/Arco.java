@@ -28,5 +28,11 @@ public class Arco<T> {
 	public T getEtiqueta() {
 		return etiqueta;
 	}
+	@Override
+	public String toString() {
+		
+		String a = "Este arco va de "+etiqueta;
+		return a;
+	}
 
 }

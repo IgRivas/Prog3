@@ -30,7 +30,11 @@ public interface Grafo<T> {
 
 	// Devuelve la cantidad total de arcos en el grafo
 	public int cantidadArcos();
-
+	
+	
+	
+	//#############################       HASTA ACA VAMOS       ########################################################################
+	
 	// Obtiene un iterador que me permite recorrer todos los vertices almacenados en el grafo 
 	public Iterator<Integer> obtenerVertices();
 
