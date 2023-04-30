@@ -14,7 +14,7 @@ public class Main {
 		tree.add('B');
 		tree.add('E');
 		tree.imprimirPreOrden();
-		System.out.println(tree.getWordsWithNvocales(2));
+		System.out.println(tree.palabrasNVocales(2,0,""));
 		
 		
 	}
