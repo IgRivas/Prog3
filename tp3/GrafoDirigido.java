@@ -4,25 +4,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class GrafoDirigido<T> implements Grafo<T> {
 	//Cada clave integer hace referencia a un vertice con valor de tipo NodoGrafo.
 	//
-	private HashMap<Integer, NodoGrafo> vertices;
-	private ArrayList<Arco<T>> arcos;
+	private HashMap<Integer, HashMap<Integer,T>> vertices;
 	
 	
 	public GrafoDirigido(){
-	this.vertices = new HashMap<>();
-	this.arcos = new ArrayList<>();
-	
+	this.vertices = new HashMap<>();	
 	}
-	//EL verticeId es la clave del HashMap, En este caso creamos el vertice con indice, pero sin valor. 
-	//Consultar si podemos cambiar la asignatura del metodo para que reciba el valor del vertice.
+	
+	//Vertice Id es el vertice en si
 	public void agregarVertice(int verticeId) {
 		//Chequea si la clave existe en el map
 		if(!vertices.containsKey(verticeId)){
-			vertices.put(verticeId,new NodoGrafo(verticeId));
+			//No me deja hacer put.(verticeId, new HashMap<>())... Unica solucion encontrada 
+			HashMap<Integer,T> arco= new HashMap<>();
+			vertices.put(verticeId, arco);
 			System.out.println("ingresado");
 		}else 
 			System.out.println("El verticeID "+verticeId+ " ya existe");
@@ -31,65 +31,71 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	}
 
 	@Override
-	//Elimina un vertice si es que este existe
+	//Elimina un vertice si es que este existe/ Debemos eliminar tambien arcos entrantes y salientes
 	public void borrarVertice(int verticeId) {
 		if(vertices.containsKey(verticeId)){	
-			vertices.remove(verticeId);
+			//Si existe el vertice buscado, debemoss recorrer todos los vertices y preguntar
+			//si este se encuentra en su lista de adyacentes, para que no queden arcos apuntando a la nada
+			for(int v: this.vertices.keySet()){ 
+				//KeySet() nos devuelve un conjunto de todas las claves del hashmap
+				HashMap<Integer, T> ady = this.vertices.get(v);
+				if(ady.containsKey(verticeId)){
+					//Si cada vertice contiene a el vertice a eliminar elmino el arco que los une
+					borrarArco(v,verticeId);
+				}
+				//Una vez eliminado los arcos, elimo el vertice
+				this.vertices.remove(verticeId);
+			}	
 		}
-		return;
+		System.out.println("El vertice no existe");
 	}
 
 	@Override
 	//
 	public void agregarArco(int verticeId1, int verticeId2, T etiqueta) {
-		Arco<T> nuevo = new Arco<>(verticeId1,verticeId2,etiqueta);
-		if(!arcos.contains(nuevo)){
-			arcos.add(nuevo);
+		//Buscamos el espacio para agregar el arco al vertice corrspondiente
+		HashMap<Integer,T> arco = this.vertices.get(verticeId1);
+		if(!this.vertices.containsKey(verticeId2)){
+			Arco<T> arcoNuevo = new Arco<T>(verticeId1,verticeId2,etiqueta);
+			arco.put(verticeId2, (T) arcoNuevo);
 		}
+		else System.out.println("El arco ya existe");
 	}
+	
+	
+	
 
 	@Override
 	public void borrarArco(int verticeId1, int verticeId2) {
-		Arco<T> aBorrar = null;
-	 	for(Arco<T> a : arcos){
-	 		if(a.getVerticeDestino()== verticeId2 && a.getVerticeOrigen()== verticeId1){
-	 			aBorrar = a;
-	 		}
-	 	}
-	 	if(aBorrar != null){
-	 		arcos.remove(aBorrar);
-	 	}
+		//Map Interno donde almacenamos los arcos. 
+		HashMap<Integer,T> aux = this.vertices.get(verticeId1);
+		if(this.existeArco(verticeId1, verticeId2)){
+			//DUDA!?
+			aux.remove(verticeId2);
+		}
 	}
 	
 
 	@Override
 	public boolean contieneVertice(int verticeId) {
-		if(vertices.containsKey(verticeId)){
-			return true;
-		}
-		return false;
+		return this.vertices.containsKey(verticeId);
+	
 	}
 
 	@Override
 	public boolean existeArco(int origen, int destino) {
-		 for(Arco<T> a : arcos){
-	 		if(a.getVerticeDestino()== destino && a.getVerticeOrigen()== origen){
-	 			return true;
-	 		}
-	 	}
-	 	return false;
+		HashMap<Integer,T> aux = this.vertices.get(origen);
+		return aux.containsKey(destino);
 	}
 
 	@Override
 	public Arco<T> obtenerArco(int origen ,int destino) {
-		Arco<T> aRetornar = null;
-		for(Arco<T> a: arcos){
-			if(a.getVerticeDestino()== destino && a.getVerticeOrigen()== origen){
-	 			aRetornar = a;
-	 			return aRetornar;
-	 			}
+		Arco<T> toReturn= null;
+		if(existeArco(origen, destino)){
+			HashMap<Integer, T> aux= this.vertices.get(origen);
+			toReturn= new Arco<T>(origen,destino,aux.get(destino));	
 		}
-		return null;
+		return toReturn;
 	}
 
 	@Override
@@ -99,19 +105,58 @@ public class GrafoDirigido<T> implements Grafo<T> {
 
 	@Override
 	public int cantidadArcos() {
-		return arcos.size();
+		int cant = 0;
+		//KeySet, conjunto de claves, en este caso todos los vertices.
+		for(int v: this.vertices.keySet()){
+			//Para cada vertice, voy a tener un hasmap con todos los arcos salientes
+			HashMap<Integer, T> aux= this.vertices.get(v);
+			//Por cada conjunto de arcos salientes, recorro y sumo el contador
+			for(int ar : aux.keySet()){
+				cant++;
+			}
+		}	
+		return cant;
 	}
 
 	@Override
 	public Iterator<Integer> obtenerVertices() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.vertices.keySet().iterator();
 	}
 
 	@Override
 	public Iterator<Integer> obtenerAdyacentes(int verticeId) {
-		
+		HashMap<Integer,T> toReturn = this.vertices.get(verticeId);
+		return toReturn.keySet().iterator();
+	}
+
+//	@Override
+//	public Iterator<Arco<T>> obtenerArcos() {
+//		HashMap<Integer, T> arcos = new HashMap<>();
+//		for(int v: this.vertices.keySet()){
+//				HashMap<Integer, T> aux= this.vertices.get(v);
+//				for(int ar : aux.keySet()){
+//					arcos.put(ar, null);
+//				}
+//		}
+//		
+//		return arcos.keySet().iterator();
+//	}
+
+	@Override
+	public Iterator<Arco<T>> obtenerArcos(int verticeId) {
+		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public String toString() {
+		String toReturn= "";
+		//el .entrySet() nos da un consjunto de todas las claves y valores
+		for (Entry<Integer, HashMap<Integer, T>> entry : this.vertices.entrySet()) {
+			toReturn +=  "\n" + entry.getKey() ;
+			toReturn += "=";
+			toReturn += entry.getValue();			
+        }
+		return toReturn;
 	}
 
 	@Override
@@ -119,11 +164,4 @@ public class GrafoDirigido<T> implements Grafo<T> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public Iterator<Arco<T>> obtenerArcos(int verticeId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

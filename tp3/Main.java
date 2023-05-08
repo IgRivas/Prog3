@@ -1,22 +1,32 @@
 package tp3;
 
+import java.util.HashMap;
+import java.util.List;
+
+
+
 
 
 public class Main {
 	public static void main(String[]args) {
-		GrafoDirigido gd1 = new GrafoDirigido();
+	GrafoDirigido<Object> grafo = new GrafoDirigido();
+		grafo.agregarVertice(3);
+		grafo.agregarVertice(8);
+		grafo.agregarVertice(7);
+		grafo.agregarVertice(10);
+		grafo.agregarVertice(9);
 		
-		gd1.agregarVertice(1);
-		gd1.agregarVertice(2);
-		gd1.agregarVertice(3);
-		gd1.agregarVertice(4);
-		gd1.agregarVertice(3);
-		System.out.println(gd1.cantidadVertices());
-		gd1.agregarArco(1, 2, "uno a dos");
-		gd1.agregarArco(1, 3, "uno a tres");
-		gd1.agregarArco(3, 2, "tres a dos");
-		System.out.println(	gd1.obtenerArco(3,2));
-		System.out.println(gd1.cantidadArcos());
+		grafo.agregarArco(3, 8, "");
+		grafo.agregarArco(3, 10, "");
+		grafo.agregarArco(8,9, "");
+		grafo.agregarArco(7,8, "");
+
 		
+		HashMap<Integer, Boolean> hash = new HashMap<>();
+		
+		
+		ServicioBFS bfs = new ServicioBFS(grafo);
+		List<Integer>auxBfs = bfs.bfsForest();
+		System.out.println(auxBfs);
 }
 }
