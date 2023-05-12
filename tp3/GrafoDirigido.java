@@ -1,15 +1,15 @@
 package tp3;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
+
+
 
 public class GrafoDirigido<T> implements Grafo<T> {
 	//Cada clave integer hace referencia a un vertice con valor de tipo NodoGrafo.
 	//
-	private HashMap<Integer, HashMap<Integer,T>> vertices;
+	private HashMap<Integer, HashMap<Integer,Arco<T>>> vertices;
 	
 	
 	public GrafoDirigido(){
@@ -21,7 +21,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 		//Chequea si la clave existe en el map
 		if(!vertices.containsKey(verticeId)){
 			//No me deja hacer put.(verticeId, new HashMap<>())... Unica solucion encontrada 
-			HashMap<Integer,T> arco= new HashMap<>();
+			HashMap<Integer,Arco<T>> arco= new HashMap<>();
 			vertices.put(verticeId, arco);
 			System.out.println("ingresado");
 		}else 
@@ -38,7 +38,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 			//si este se encuentra en su lista de adyacentes, para que no queden arcos apuntando a la nada
 			for(int v: this.vertices.keySet()){ 
 				//KeySet() nos devuelve un conjunto de todas las claves del hashmap
-				HashMap<Integer, T> ady = this.vertices.get(v);
+				HashMap<Integer, Arco<T>> ady = this.vertices.get(v);
 				if(ady.containsKey(verticeId)){
 					//Si cada vertice contiene a el vertice a eliminar elmino el arco que los une
 					borrarArco(v,verticeId);
@@ -54,10 +54,10 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	//
 	public void agregarArco(int verticeId1, int verticeId2, T etiqueta) {
 		//Buscamos el espacio para agregar el arco al vertice corrspondiente
-		HashMap<Integer,T> arco = this.vertices.get(verticeId1);
-		if(!this.vertices.containsKey(verticeId2)){
+		HashMap<Integer,Arco<T>> arcos = this.vertices.get(verticeId1);
+		if(!arcos.containsKey(verticeId2)){
 			Arco<T> arcoNuevo = new Arco<T>(verticeId1,verticeId2,etiqueta);
-			arco.put(verticeId2, (T) arcoNuevo);
+			arcos.put(verticeId2,arcoNuevo);
 		}
 		else System.out.println("El arco ya existe");
 	}
@@ -68,7 +68,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	@Override
 	public void borrarArco(int verticeId1, int verticeId2) {
 		//Map Interno donde almacenamos los arcos. 
-		HashMap<Integer,T> aux = this.vertices.get(verticeId1);
+		HashMap<Integer,Arco<T>> aux = this.vertices.get(verticeId1);
 		if(this.existeArco(verticeId1, verticeId2)){
 			//DUDA!?
 			aux.remove(verticeId2);
@@ -84,20 +84,23 @@ public class GrafoDirigido<T> implements Grafo<T> {
 
 	@Override
 	public boolean existeArco(int origen, int destino) {
-		HashMap<Integer,T> aux = this.vertices.get(origen);
+		HashMap<Integer,Arco<T>> aux = this.vertices.get(origen);
 		return aux.containsKey(destino);
 	}
 
 	@Override
-	public Arco<T> obtenerArco(int origen ,int destino) {
-		Arco<T> toReturn= null;
-		if(existeArco(origen, destino)){
-			HashMap<Integer, T> aux= this.vertices.get(origen);
-			toReturn= new Arco<T>(origen,destino,aux.get(destino));	
+	public Arco<T> obtenerArco(int verticeId1, int verticeId2) {
+		if(this.existeArco(verticeId1, verticeId2)) {
+			Arco<T> toReturn = null;
+			
+			HashMap<Integer,Arco<T>>aux = this.vertices.get(verticeId1);
+			
+			toReturn = aux.get(verticeId2);
+			
+			return toReturn;
 		}
-		return toReturn;
+		return null;		
 	}
-
 	@Override
 	public int cantidadVertices() {
 		return vertices.size();
@@ -109,7 +112,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 		//KeySet, conjunto de claves, en este caso todos los vertices.
 		for(int v: this.vertices.keySet()){
 			//Para cada vertice, voy a tener un hasmap con todos los arcos salientes
-			HashMap<Integer, T> aux= this.vertices.get(v);
+			HashMap<Integer,Arco<T>> aux= this.vertices.get(v);
 			//Por cada conjunto de arcos salientes, recorro y sumo el contador
 			for(int ar : aux.keySet()){
 				cant++;
@@ -125,9 +128,10 @@ public class GrafoDirigido<T> implements Grafo<T> {
 
 	@Override
 	public Iterator<Integer> obtenerAdyacentes(int verticeId) {
-		HashMap<Integer,T> toReturn = this.vertices.get(verticeId);
+		HashMap<Integer,Arco<T>> toReturn =  this.vertices.get(verticeId);
 		return toReturn.keySet().iterator();
 	}
+
 
 //	@Override
 //	public Iterator<Arco<T>> obtenerArcos() {
@@ -151,7 +155,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	public String toString() {
 		String toReturn= "";
 		//el .entrySet() nos da un consjunto de todas las claves y valores
-		for (Entry<Integer, HashMap<Integer, T>> entry : this.vertices.entrySet()) {
+		for (Entry<Integer, HashMap<Integer, Arco<T>>> entry : this.vertices.entrySet()) {
 			toReturn +=  "\n" + entry.getKey() ;
 			toReturn += "=";
 			toReturn += entry.getValue();			
