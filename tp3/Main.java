@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
+
 import tp3.Arco;
 import tp3.GrafoDirigido;
 import tp3.ServicioBFS;
 import tp3.ServicioCaminos;
-//import tp3.ServicioDFS;
+import tp3.ServicioDFS;
 
-public class Main{
+public class Main {
 
 	public Main() {
 		// TODO Auto-generated constructor stub
@@ -66,12 +68,21 @@ public class Main{
 		grafo.agregarVertice(6);
 		grafo.agregarVertice(10);
 		grafo.agregarVertice(9);
+		grafo.agregarVertice(11);
+		grafo.agregarVertice(5);
+		grafo.agregarVertice(2);
+
 		grafo.agregarArco(3, 8, "");
-		grafo.agregarArco(8, 9, "");
+//		grafo.agregarArco(8, 9, "");
 		grafo.agregarArco(3, 10, "");
 		grafo.agregarArco(3, 6, "");
 		grafo.agregarArco(6, 9, "");
 		grafo.agregarArco(7, 8, "");
+//		grafo.agregarArco(9, 11, "");
+		grafo.agregarArco(8, 5, "");
+		grafo.agregarArco(5, 11, "");
+		grafo.agregarArco(9, 2, "");
+		grafo.agregarArco(2, 11, "");
 		
 		HashMap<Integer, Boolean> hash = new HashMap<>();
 		System.out.println(grafo);
@@ -80,25 +91,40 @@ public class Main{
 		System.out.println(grafo.cantidadArcos());
 		grafo.obtenerArcos();
 		
-//		
-//		ServicioDFS dfs = new ServicioDFS(grafo);
-//		List<Integer>aux = dfs.dfsForest();
-//		System.out.println(aux);
+		
+		ServicioDFS dfs = new ServicioDFS(grafo);
+		List<Integer>aux = dfs.dfsForest();
+		System.out.println(aux);
 		
 		ServicioBFS bfs = new ServicioBFS(grafo);
 		List<Integer>auxBfs = bfs.bfsForest();
 		System.out.println(auxBfs);
 		
-		ServicioCaminos sc = new ServicioCaminos(grafo, 3, 9, 10);
+		ServicioCaminos sc = new ServicioCaminos(grafo, 3, 11, 10);
 		List<List<Integer>> auxSc = sc.caminos();
 		System.out.println( auxSc );
 //		System.out.println(grafo);
 //		grafo.borrarArco(11, 10);
 //		System.out.println(grafo);
+//		
+//		ejercicio3 e3 = new ejercicio3(grafo);
+//		
+//		System.out.println(e3.dfsForest());
+//		
+//		ej4 e4 = new ej4(grafo);
+//		ArrayList<Integer> auxej4 = e4.caminosSimpleMasLargo(3, 11);
+//		System.out.println("------------------");
+//		System.out.println(auxej4);
+//		
+//		ej5 e5 = new ej5();
+//		ArrayList<Integer> auxej5 = e5.ejercicio5(grafo, 5);
+//		System.out.println("------------------");
+//		System.out.println(auxej5);
 
-	
-		
-		
+		ej6 e6 = new ej6();
+		ArrayList<Integer> auxej6 = e6.calcularConexion(grafo, 3, 11, 6);
+		System.out.println("-----------------");
+		System.out.println(auxej6);
 		
 		
 		
